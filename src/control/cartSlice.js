@@ -1,40 +1,16 @@
-import './App.css';
-import CourseList from './components/CourseList';
-import Navbar from './components/Navbar';
-import { useEffect } from 'react';
-import { calculateTotal } from './control/cartSlice';
-import { useSelector, useDispatch } from 'react-redux';
+import { createSlice } from '@reduxjs/toolkit';
+import courseItems from '../courseItems';
 
-function App() {
-  const { cartItems } = useSelector((store) => store.cart);
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(calculateTotal());
-  }, [cartItems]);
-  return (
-    <div className="App">
-      <Navbar />
-      <CourseList />
-    </div>
-  );
-}
+const initialState = {
+  cartItems: courseItems,
+  quantity: 5,
+  total: 0,
+};
 
-export default App;
-
-
-
-/*
-useEffect(() => {
-    dispatch(calculateTotal());
-  }, [cartItems]);
-{quantity < 1 ? (
-        <section className="cart">
-        </section>
-      ) : (
-        <section className="cart">
-          <header>
-            <h2>Sepetim</h2>
-reducers: {
+const cartSlice = createSlice({
+  name: 'cart',
+  initialState,
+  reducers: {
     clearCart: (state) => {
       state.cartItems = [];
     },
@@ -64,6 +40,13 @@ reducers: {
       });
       state.quantity = quantity;
       state.total = total;
-    },            
+    },
+  },
+});
 
-*/
+// console.log(cartSlice);
+
+export const { clearCart, removeItem, increase, decrease, calculateTotal } =
+  cartSlice.actions;
+
+export default cartSlice.reducer;
